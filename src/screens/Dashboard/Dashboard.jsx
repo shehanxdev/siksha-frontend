@@ -6,17 +6,31 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 function Dashboard() {
   const [inquiries, setInquiries] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedInquiry, setSelectedinquiry] = useState();
+  const [selectedInquiry, setSelectedInquiry] = useState({
+    name: "",
+    studentId: "",
+    inquiryType: "",
+    subject: "",
+    email: "",
+    contactNo: "",
+    message: "",
+  });
+  const navigate = useNavigate();
   useEffect(() => {
     async function fetchData() {
       const res = await axios.get(
@@ -31,27 +45,46 @@ function Dashboard() {
     fetchData();
   }, []);
   const handleEdit = (inquiry) => {
-    setSelectedinquiry(inquiry);
+    setSelectedInquiry({ ...inquiry });
     setDialogOpen(true);
   };
 
-  const handleDelete = () => {};
+  const handleDelete = () => {
+    axios
+      .delete(
+        `http://localhost:8080/student/student-inquiries/${selectedInquiry.id}`
+      )
+      .then((res) => {
+        console.log("Deletion complete");
+      })
+      .catch((err) => {
+        console.log("error deleting " + err);
+      });
+  };
 
   const handleDialogClose = () => {
     setDialogOpen(false);
   };
   const handleChange = (event) => {
-    setSelectedinquiry({
+    setSelectedInquiry({
       ...selectedInquiry,
       [event.target.name]: event.target.value,
     });
   };
-  const handleSave = () => {
-    axios.put(
-      `http://localhost:8080/student/student-inquiries/${selectedInquiry.id}`,
-      { selectedInquiry }
-    );
-    console.log(selectedInquiry.id);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    axios
+      .put(
+        `http://localhost:8080/student/student-inquiries/${selectedInquiry.id}`,
+        { selectedInquiry }
+      )
+      .then((res) => {
+        console.log("Inquiry updated");
+      })
+      .catch((err) => {
+        console.log("Updation did not work");
+      });
+    console.log(selectedInquiry);
   };
   const inquiryFormatter = (inquiries) => {
     return inquiries.map((inquiry) => {
@@ -108,72 +141,84 @@ function Dashboard() {
             <Dialog open={dialogOpen} onClose={handleDialogClose}>
               <DialogTitle>Edit Inquiry</DialogTitle>
               <DialogContent>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  label="Name"
-                  name="name"
-                  value={selectedInquiry.name}
-                  onChange={handleChange}
-                  fullWidth
-                />
-                <TextField
-                  margin="dense"
-                  label="Student ID"
-                  name="studentId"
-                  value={selectedInquiry.studentId}
-                  onChange={handleChange}
-                  fullWidth
-                />
-                <TextField
-                  margin="dense"
-                  label="Inquiry Type"
-                  name="inquiryType"
-                  value={inquiry.inquiryType}
-                  onChange={handleChange}
-                  fullWidth
-                />
-                <TextField
-                  margin="dense"
-                  label="Subject"
-                  name="subject"
-                  value={inquiry.subject}
-                  onChange={handleChange}
-                  fullWidth
-                />
-                <TextField
-                  margin="dense"
-                  label="Email"
-                  name="email"
-                  value={inquiry.email}
-                  onChange={handleChange}
-                  fullWidth
-                />
-                <TextField
-                  margin="dense"
-                  label="Contact No"
-                  name="contactNo"
-                  value={inquiry.contactNo}
-                  onChange={handleChange}
-                  fullWidth
-                />
-                <TextField
-                  margin="dense"
-                  label="Message"
-                  name="message"
-                  value={inquiry.message}
-                  onChange={handleChange}
-                  fullWidth
-                />
+                <form onSubmit={handleSubmit}>
+                  <TextField
+                    style={{ marginTop: "20px" }}
+                    fullWidth
+                    label="Name"
+                    name="name"
+                    value={selectedInquiry.name}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    style={{ marginTop: "20px" }}
+                    fullWidth
+                    label="Student ID"
+                    name="studentId"
+                    value={selectedInquiry.studentId}
+                    onChange={handleChange}
+                  />
+                  <FormControl style={{ marginTop: "20px" }} fullWidth>
+                    <InputLabel id="inquiry-type-label">
+                      Inquiry Type
+                    </InputLabel>
+                    <Select
+                      labelId="inquiry-type-label"
+                      id="inquiry-type"
+                      name="inquiryType"
+                      value={selectedInquiry.inquiryType}
+                      onChange={handleChange}
+                    >
+                      <MenuItem value="Admissions">Admissions</MenuItem>
+                      <MenuItem value="Academics">Academics</MenuItem>
+                      <MenuItem value="Financial Aid">Financial Aid</MenuItem>
+                      <MenuItem value="Other">Other</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    style={{ marginTop: "20px" }}
+                    fullWidth
+                    label="Subject"
+                    name="subject"
+                    value={selectedInquiry.subject}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    style={{ marginTop: "20px" }}
+                    fullWidth
+                    label="Email"
+                    name="email"
+                    value={selectedInquiry.email}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    style={{ marginTop: "20px" }}
+                    fullWidth
+                    label="Contact No"
+                    name="contactNo"
+                    value={selectedInquiry.contactNo}
+                    onChange={handleChange}
+                  />
+                  <TextField
+                    style={{ marginTop: "20px" }}
+                    fullWidth
+                    label="Message"
+                    name="message"
+                    multiline
+                    rows={4}
+                    value={selectedInquiry.message}
+                    onChange={handleChange}
+                  />
+                  <Button
+                    style={{ marginTop: "20px" }}
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                  >
+                    Save
+                  </Button>
+                </form>
               </DialogContent>
-              <CardActions>
-                <Button style={{ color: "black" }} onClick={handleDialogClose}>
-                  Cancel
-                </Button>
-                <Button style={{ color: "blue" }} onClick={handleSave}>
-                  save
-                </Button>
-              </CardActions>
             </Dialog>
           )}
         </>
@@ -197,6 +242,15 @@ function Dashboard() {
           alignItems: "center",
         }}
       >
+        <h1>
+          <Button
+            onClick={() => {
+              navigate("../add");
+            }}
+          >
+            Add new inquiry
+          </Button>
+        </h1>
         {inquiryFormatter(inquiries)}
       </div>
     );

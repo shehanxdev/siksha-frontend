@@ -73,10 +73,12 @@ function Dashboard() {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
+    const jsonInquiry = JSON.stringify({ ...selectedInquiry });
     axios
       .put(
         `http://localhost:8080/student/student-inquiries/${selectedInquiry.id}`,
-        { selectedInquiry }
+        jsonInquiry,
+        { headers: { "Content-Type": "application/json" } }
       )
       .then((res) => {
         console.log("Inquiry updated");
@@ -84,7 +86,10 @@ function Dashboard() {
       .catch((err) => {
         console.log("Updation did not work");
       });
-    console.log(selectedInquiry);
+    console.log(
+      `http://localhost:8080/student/student-inquiries/${selectedInquiry.id}`
+    );
+    console.log(jsonInquiry);
   };
   const inquiryFormatter = (inquiries) => {
     return inquiries.map((inquiry) => {
@@ -240,6 +245,7 @@ function Dashboard() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          height: "90vh",
         }}
       >
         <h1>

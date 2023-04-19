@@ -32,7 +32,7 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth="xs">
+    <Container style={{ height: "90vh" }} maxWidth="xs">
       <Box mt={5} mb={3}>
         <Typography variant="h4" align="center">
           Login

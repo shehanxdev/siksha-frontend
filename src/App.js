@@ -4,10 +4,11 @@ import Login from "./screens/Login/Login";
 import Dashboard from "./screens/Dashboard/Dashboard";
 import NavBar from "./components/NavBar/NavBar";
 import AddInuiry from "./screens/AddInquiry/AddInuiry";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
-    <>
+    <div style={{ minHeight: "100vh" }}>
       <NavBar />
       <BrowserRouter>
         <Routes>
@@ -16,7 +17,8 @@ function App() {
           <Route path="/add" element={<AddInuiry />} />
         </Routes>
       </BrowserRouter>
-    </>
+      <Footer />
+    </div>
   );
 }
 

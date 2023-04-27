@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 function Dashboard() {
+  const [searchTerm, setSearchTerm] = useState();
   const [inquiries, setInquiries] = useState(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedInquiry, setSelectedInquiry] = useState({
@@ -49,11 +50,16 @@ function Dashboard() {
     setDialogOpen(true);
   };
 
-  const handleDelete = () => {
+  const handleSearch = () => {
+    const newInquiries = inquiries.filter(
+      (inquiry) => inquiry.name === searchTerm
+    );
+    setInquiries(newInquiries);
+    console.log(searchTerm);
+  };
+  const handleDelete = (id) => {
     axios
-      .delete(
-        `http://localhost:8080/student/student-inquiries/${selectedInquiry.id}`
-      )
+      .delete(`http://localhost:8080/student/student-inquiries/${id}`)
       .then((res) => {
         console.log("Deletion complete");
       })
@@ -95,7 +101,104 @@ function Dashboard() {
     return inquiries.map((inquiry) => {
       return (
         <>
-          <Card
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "left",
+              width: "70%",
+            }}
+          >
+            <span
+              style={{
+                paddingRight: "5%",
+                borderBottom: "1px solid black",
+                maxWidth: "60px",
+                marginBottom: "5%",
+              }}
+            >
+              {inquiry.name}
+            </span>
+            <span
+              style={{
+                paddingRight: "5%",
+                borderBottom: "1px solid black",
+                maxWidth: "60px",
+                marginBottom: "5%",
+              }}
+            >
+              {inquiry.studentId}
+            </span>
+            <span
+              style={{
+                paddingRight: "5%",
+                borderBottom: "1px solid black",
+                maxWidth: "60px",
+                marginBottom: "5%",
+              }}
+            >
+              {inquiry.inquiryType}
+            </span>
+            <span
+              style={{
+                paddingRight: "5%",
+                borderBottom: "1px solid black",
+                maxWidth: "60px",
+                marginBottom: "5%",
+              }}
+            >
+              {inquiry.subject}
+            </span>
+            <span
+              style={{
+                paddingRight: "5%",
+                borderBottom: "1px solid black",
+                maxWidth: "150px",
+                marginBottom: "5%",
+              }}
+            >
+              {inquiry.email}
+            </span>
+            <span
+              style={{
+                paddingRight: "5%",
+                borderBottom: "1px solid black",
+                maxWidth: "60px",
+                marginBottom: "5%",
+              }}
+            >
+              {inquiry.contactNo}
+            </span>
+            <span
+              style={{
+                paddingRight: "5%",
+                borderBottom: "1px solid black",
+                maxWidth: "250px",
+                marginBottom: "5%",
+              }}
+            >
+              {inquiry.message}
+            </span>
+            <a
+              style={{ marginRight: "20px" }}
+              onClick={() => {
+                handleEdit(inquiry);
+              }}
+              href="#"
+            >
+              Edit
+            </a>
+            <a
+              style={{ color: "red" }}
+              onClick={() => {
+                handleDelete(inquiry.id);
+              }}
+              href="#"
+            >
+              Delete
+            </a>
+          </div>
+          {/* <Card
             sx={{ width: "50%", marginBottom: "20px", marginTop: "10px" }}
             elevation={18}
           >
@@ -141,7 +244,7 @@ function Dashboard() {
                 Delete
               </Button>
             </CardActions>
-          </Card>
+          </Card> */}
           {selectedInquiry && (
             <Dialog open={dialogOpen} onClose={handleDialogClose}>
               <DialogTitle>Edit Inquiry</DialogTitle>
@@ -248,6 +351,24 @@ function Dashboard() {
           height: "90vh",
         }}
       >
+        <div style={{ display: "flex", marginBottom: "100px" }}>
+          <TextField
+            sx={{ width: "600px" }}
+            id="outlined-basic"
+            label="Search"
+            variant="outlined"
+            onChange={(event) => setSearchTerm(event.target.value)}
+          />
+          <Button
+            title="Search"
+            type="submit"
+            onClick={() => {
+              handleSearch();
+            }}
+          >
+            Search
+          </Button>
+        </div>
         <h1>
           <Button
             onClick={() => {
@@ -257,6 +378,106 @@ function Dashboard() {
             Add new inquiry
           </Button>
         </h1>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "left",
+            width: "70%",
+          }}
+        >
+          <span
+            style={{
+              paddingRight: "5%",
+              borderBottom: "1px solid black",
+
+              maxWidth: "60px",
+              marginBottom: "5%",
+
+              fontWeight: "bold",
+            }}
+          >
+            Inquiry Name
+          </span>
+          <span
+            style={{
+              paddingRight: "5%",
+              borderBottom: "1px solid black",
+
+              maxWidth: "60px",
+              marginBottom: "5%",
+
+              fontWeight: "bold",
+            }}
+          >
+            Student ID
+          </span>
+          <span
+            style={{
+              paddingRight: "5%",
+              borderBottom: "1px solid black",
+
+              maxWidth: "60px",
+              marginBottom: "5%",
+
+              fontWeight: "bold",
+            }}
+          >
+            Inquiry type
+          </span>
+          <span
+            style={{
+              paddingRight: "5%",
+              borderBottom: "1px solid black",
+
+              maxWidth: "60px",
+              marginBottom: "5%",
+
+              fontWeight: "bold",
+            }}
+          >
+            Subject
+          </span>
+          <span
+            style={{
+              paddingRight: "5%",
+              borderBottom: "1px solid black",
+
+              maxWidth: "150px",
+              marginBottom: "5%",
+
+              fontWeight: "bold",
+            }}
+          >
+            Email
+          </span>
+          <span
+            style={{
+              paddingRight: "5%",
+              borderBottom: "1px solid black",
+
+              maxWidth: "60px",
+              marginBottom: "5%",
+
+              fontWeight: "bold",
+            }}
+          >
+            Contact
+          </span>
+          <span
+            style={{
+              paddingRight: "5%",
+              borderBottom: "1px solid black",
+
+              maxWidth: "250px",
+              marginBottom: "5%",
+
+              fontWeight: "bold",
+            }}
+          >
+            Message
+          </span>
+        </div>
         {inquiryFormatter(inquiries)}
       </div>
     );

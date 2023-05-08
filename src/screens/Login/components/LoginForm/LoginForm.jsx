@@ -16,6 +16,7 @@ import { useNavigate } from "react-router";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState();
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => {
@@ -31,6 +32,9 @@ const Login = () => {
     // Handle login form submission here
   };
 
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
   return (
     <Container style={{ height: "90vh" }} maxWidth="xs">
       <Box mt={5} mb={3}>
@@ -41,6 +45,8 @@ const Login = () => {
       <form onSubmit={handleSubmit}>
         <TextField
           variant="outlined"
+          onChange={(e) => handleEmailChange(e)}
+          value={email}
           margin="normal"
           required
           fullWidth
@@ -74,7 +80,13 @@ const Login = () => {
         </FormControl>
         <Box mt={2}>
           <Button
-            onClick={() => navigate("/dashboard")}
+            onClick={() => {
+              if (email === "admin") {
+                navigate("/admin/dashboard");
+              } else {
+                navigate("/dashboard");
+              }
+            }}
             type="submit"
             fullWidth
             variant="contained"

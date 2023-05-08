@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./screens/Login/Login";
-import Dashboard from "./screens/Dashboard/Dashboard";
+import Dashboard, { AdminDashboard } from "./screens/Dashboard/Dashboard";
 import NavBar from "./components/NavBar/NavBar";
 import AddInuiry from "./screens/AddInquiry/AddInuiry";
 import Footer from "./components/Footer/Footer";
@@ -13,6 +13,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="" element={<Login />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/add" element={<AddInuiry />} />
         </Routes>

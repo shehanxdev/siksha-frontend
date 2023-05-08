@@ -1,8 +1,5 @@
 import {
   Button,
-  Card,
-  CardActions,
-  CardContent,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -11,7 +8,6 @@ import {
   MenuItem,
   Select,
   TextField,
-  Typography,
 } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
@@ -55,7 +51,6 @@ function Dashboard() {
       (inquiry) => inquiry.name === searchTerm
     );
     setInquiries(newInquiries);
-    console.log(searchTerm);
   };
   const handleDelete = (id) => {
     axios
@@ -98,240 +93,175 @@ function Dashboard() {
     console.log(jsonInquiry);
   };
   const inquiryFormatter = (inquiries) => {
-    return inquiries.map((inquiry) => {
-      return (
-        <>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "left",
-              width: "70%",
-            }}
-          >
-            <span
-              style={{
-                paddingRight: "5%",
-                borderBottom: "1px solid black",
-                maxWidth: "60px",
-                marginBottom: "5%",
-              }}
-            >
-              {inquiry.name}
-            </span>
-            <span
-              style={{
-                paddingRight: "5%",
-                borderBottom: "1px solid black",
-                maxWidth: "60px",
-                marginBottom: "5%",
-              }}
-            >
-              {inquiry.studentId}
-            </span>
-            <span
-              style={{
-                paddingRight: "5%",
-                borderBottom: "1px solid black",
-                maxWidth: "60px",
-                marginBottom: "5%",
-              }}
-            >
-              {inquiry.inquiryType}
-            </span>
-            <span
-              style={{
-                paddingRight: "5%",
-                borderBottom: "1px solid black",
-                maxWidth: "60px",
-                marginBottom: "5%",
-              }}
-            >
-              {inquiry.subject}
-            </span>
-            <span
-              style={{
-                paddingRight: "5%",
-                borderBottom: "1px solid black",
-                maxWidth: "150px",
-                marginBottom: "5%",
-              }}
-            >
-              {inquiry.email}
-            </span>
-            <span
-              style={{
-                paddingRight: "5%",
-                borderBottom: "1px solid black",
-                maxWidth: "60px",
-                marginBottom: "5%",
-              }}
-            >
-              {inquiry.contactNo}
-            </span>
-            <span
-              style={{
-                paddingRight: "5%",
-                borderBottom: "1px solid black",
-                maxWidth: "250px",
-                marginBottom: "5%",
-              }}
-            >
-              {inquiry.message}
-            </span>
-            <a
-              style={{ marginRight: "20px" }}
-              onClick={() => {
-                handleEdit(inquiry);
-              }}
-              href="#"
-            >
-              Edit
-            </a>
-            <a
-              style={{ color: "red" }}
-              onClick={() => {
-                handleDelete(inquiry.id);
-              }}
-              href="#"
-            >
-              Delete
-            </a>
-          </div>
-          {/* <Card
-            sx={{ width: "50%", marginBottom: "20px", marginTop: "10px" }}
-            elevation={18}
-          >
-            <CardContent>
-              <Typography variant="h5" component="h2">
-                Inquiry Details
-              </Typography>
-              <Typography variant="body2" component="p">
-                Name: {inquiry.name}
-              </Typography>
-              <Typography variant="body2" component="p">
-                Student ID: {inquiry.studentId}
-              </Typography>
-              <Typography variant="body2" component="p">
-                Inquiry Type: {inquiry.inquiryType}
-              </Typography>
-              <Typography variant="body2" component="p">
-                Subject: {inquiry.subject}
-              </Typography>
-              <Typography variant="body2" component="p">
-                Email: {inquiry.email}
-              </Typography>
-              <Typography variant="body2" component="p">
-                Contact No: {inquiry.contactNo}
-              </Typography>
-              <Typography variant="body2" component="p">
-                Message: {inquiry.message}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <Button
-                size="small"
-                color="primary"
-                onClick={() => handleEdit(inquiry)}
-              >
+    return (
+      <>
+        <table style={{ borderCollapse: "collapse", width: "100%" }}>
+          <thead>
+            <tr style={{ borderBottom: "1px solid black" }}>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
+                Name
+              </th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
+                Student ID
+              </th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
+                Inquiry Type
+              </th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
+                Subject
+              </th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
+                Email
+              </th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
+                Contact No
+              </th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
+                Message
+              </th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
                 Edit
-              </Button>
-              <Button
-                size="small"
-                color="error"
-                onClick={() => handleDelete(inquiry.id)}
-              >
+              </th>
+              <th style={{ border: "1px solid black", padding: "8px" }}>
                 Delete
-              </Button>
-            </CardActions>
-          </Card> */}
-          {selectedInquiry && (
-            <Dialog open={dialogOpen} onClose={handleDialogClose}>
-              <DialogTitle>Edit Inquiry</DialogTitle>
-              <DialogContent>
-                <form onSubmit={handleSubmit}>
-                  <TextField
-                    style={{ marginTop: "20px" }}
-                    fullWidth
-                    label="Name"
-                    name="name"
-                    value={selectedInquiry.name}
-                    onChange={handleChange}
-                  />
-                  <TextField
-                    style={{ marginTop: "20px" }}
-                    fullWidth
-                    label="Student ID"
-                    name="studentId"
-                    value={selectedInquiry.studentId}
-                    onChange={handleChange}
-                  />
-                  <FormControl style={{ marginTop: "20px" }} fullWidth>
-                    <InputLabel id="inquiry-type-label">
-                      Inquiry Type
-                    </InputLabel>
-                    <Select
-                      labelId="inquiry-type-label"
-                      id="inquiry-type"
-                      name="inquiryType"
-                      value={selectedInquiry.inquiryType}
-                      onChange={handleChange}
-                    >
-                      <MenuItem value="Admissions">Admissions</MenuItem>
-                      <MenuItem value="Academics">Academics</MenuItem>
-                      <MenuItem value="Financial Aid">Financial Aid</MenuItem>
-                      <MenuItem value="Other">Other</MenuItem>
-                    </Select>
-                  </FormControl>
-                  <TextField
-                    style={{ marginTop: "20px" }}
-                    fullWidth
-                    label="Subject"
-                    name="subject"
-                    value={selectedInquiry.subject}
-                    onChange={handleChange}
-                  />
-                  <TextField
-                    style={{ marginTop: "20px" }}
-                    fullWidth
-                    label="Email"
-                    name="email"
-                    value={selectedInquiry.email}
-                    onChange={handleChange}
-                  />
-                  <TextField
-                    style={{ marginTop: "20px" }}
-                    fullWidth
-                    label="Contact No"
-                    name="contactNo"
-                    value={selectedInquiry.contactNo}
-                    onChange={handleChange}
-                  />
-                  <TextField
-                    style={{ marginTop: "20px" }}
-                    fullWidth
-                    label="Message"
-                    name="message"
-                    multiline
-                    rows={4}
-                    value={selectedInquiry.message}
-                    onChange={handleChange}
-                  />
-                  <Button
-                    style={{ marginTop: "20px" }}
-                    type="submit"
-                    variant="contained"
-                    color="primary"
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {inquiries.map((inquiry) => (
+              <tr key={inquiry.id} style={{ borderBottom: "1px solid black" }}>
+                <td style={{ border: "1px solid black", padding: "8px" }}>
+                  {inquiry.name}
+                </td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>
+                  {inquiry.studentId}
+                </td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>
+                  {inquiry.inquiryType}
+                </td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>
+                  {inquiry.subject}
+                </td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>
+                  {inquiry.email}
+                </td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>
+                  {inquiry.contactNo}
+                </td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>
+                  {inquiry.message}
+                </td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>
+                  <a
+                    style={{ marginRight: "20px" }}
+                    onClick={() => {
+                      handleEdit(inquiry);
+                    }}
+                    href="#"
                   >
-                    Save
-                  </Button>
-                </form>
-              </DialogContent>
-            </Dialog>
-          )}
-        </>
-      );
-    });
+                    Edit
+                  </a>
+                </td>
+                <td style={{ border: "1px solid black", padding: "8px" }}>
+                  <a
+                    style={{ color: "red" }}
+                    onClick={() => {
+                      handleDelete(inquiry.id);
+                    }}
+                    href="#"
+                  >
+                    Delete
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {selectedInquiry && (
+          <Dialog open={dialogOpen} onClose={handleDialogClose}>
+            <DialogTitle>Edit Inquiry</DialogTitle>
+            <DialogContent>
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  fullWidth
+                  label="Name"
+                  name="name"
+                  value={selectedInquiry.name}
+                  onChange={handleChange}
+                />
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  fullWidth
+                  label="Student ID"
+                  name="studentId"
+                  value={selectedInquiry.studentId}
+                  onChange={handleChange}
+                />
+                <FormControl style={{ marginTop: "20px" }} fullWidth>
+                  <InputLabel id="inquiry-type-label">Inquiry Type</InputLabel>
+                  <Select
+                    labelId="inquiry-type-label"
+                    id="inquiry-type"
+                    name="inquiryType"
+                    value={selectedInquiry.inquiryType}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="Admissions">Admissions</MenuItem>
+                    <MenuItem value="Academics">Academics</MenuItem>
+                    <MenuItem value="Financial Aid">Financial Aid</MenuItem>
+                    <MenuItem value="Other">Other</MenuItem>
+                  </Select>
+                </FormControl>
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  fullWidth
+                  label="Subject"
+                  name="subject"
+                  value={selectedInquiry.subject}
+                  onChange={handleChange}
+                />
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  fullWidth
+                  label="Email"
+                  name="email"
+                  value={selectedInquiry.email}
+                  onChange={handleChange}
+                />
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  fullWidth
+                  label="Contact No"
+                  name="contactNo"
+                  value={selectedInquiry.contactNo}
+                  onChange={handleChange}
+                />
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  fullWidth
+                  label="Message"
+                  name="message"
+                  multiline
+                  rows={4}
+                  value={selectedInquiry.message}
+                  onChange={handleChange}
+                />
+                <Button
+                  style={{ marginTop: "20px" }}
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                >
+                  Save
+                </Button>
+              </form>
+            </DialogContent>
+          </Dialog>
+        )}
+      </>
+    );
   };
 
   if (!inquiries) {
@@ -342,143 +272,69 @@ function Dashboard() {
     );
   } else {
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "90vh",
-        }}
-      >
-        <div style={{ display: "flex", marginBottom: "100px" }}>
-          <TextField
-            sx={{ width: "600px" }}
-            id="outlined-basic"
-            label="Search"
-            variant="outlined"
-            onChange={(event) => setSearchTerm(event.target.value)}
-          />
-          <Button
-            title="Search"
-            type="submit"
-            onClick={() => {
-              handleSearch();
-            }}
-          >
-            Search
-          </Button>
-        </div>
-        <h1>
-          <Button
-            onClick={() => {
-              navigate("../add");
-            }}
-          >
-            Add new inquiry
-          </Button>
-        </h1>
+      <div style={{ display: "flex" }}>
         <div
           style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "left",
-            width: "70%",
+            width: "200px",
+            height: "100vh",
+            backgroundColor: "#333",
+            color: "#fff",
+            padding: "10px",
           }}
         >
-          <span
-            style={{
-              paddingRight: "5%",
-              borderBottom: "1px solid black",
-
-              maxWidth: "60px",
-              marginBottom: "5%",
-
-              fontWeight: "bold",
-            }}
-          >
-            Inquiry Name
-          </span>
-          <span
-            style={{
-              paddingRight: "5%",
-              borderBottom: "1px solid black",
-
-              maxWidth: "60px",
-              marginBottom: "5%",
-
-              fontWeight: "bold",
-            }}
-          >
-            Student ID
-          </span>
-          <span
-            style={{
-              paddingRight: "5%",
-              borderBottom: "1px solid black",
-
-              maxWidth: "60px",
-              marginBottom: "5%",
-
-              fontWeight: "bold",
-            }}
-          >
-            Inquiry type
-          </span>
-          <span
-            style={{
-              paddingRight: "5%",
-              borderBottom: "1px solid black",
-
-              maxWidth: "60px",
-              marginBottom: "5%",
-
-              fontWeight: "bold",
-            }}
-          >
-            Subject
-          </span>
-          <span
-            style={{
-              paddingRight: "5%",
-              borderBottom: "1px solid black",
-
-              maxWidth: "150px",
-              marginBottom: "5%",
-
-              fontWeight: "bold",
-            }}
-          >
-            Email
-          </span>
-          <span
-            style={{
-              paddingRight: "5%",
-              borderBottom: "1px solid black",
-
-              maxWidth: "60px",
-              marginBottom: "5%",
-
-              fontWeight: "bold",
-            }}
-          >
-            Contact
-          </span>
-          <span
-            style={{
-              paddingRight: "5%",
-              borderBottom: "1px solid black",
-
-              maxWidth: "250px",
-              marginBottom: "5%",
-
-              fontWeight: "bold",
-            }}
-          >
-            Message
-          </span>
+          <ul style={{ listStyle: "none", padding: 0 }}>
+            <li
+              style={{ margin: "10px 0", fontSize: "18px", fontWeight: "bold" }}
+            >
+              Menu
+            </li>
+            <li style={{ margin: "10px 0" }}>Home</li>
+            <li style={{ margin: "10px 0" }}>About</li>
+            <li style={{ margin: "10px 0" }}>Contact</li>
+          </ul>
         </div>
-        {inquiryFormatter(inquiries)}
+        <div style={{ flex: 1 }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+
+              alignItems: "center",
+              height: "90vh",
+              margin: "100px 80px 0 80px",
+            }}
+          >
+            <div style={{ display: "flex", marginBottom: "40px" }}>
+              <TextField
+                sx={{ width: "600px" }}
+                id="outlined-basic"
+                label="Search"
+                variant="outlined"
+                onChange={(event) => setSearchTerm(event.target.value)}
+              />
+              <Button
+                title="Search"
+                type="submit"
+                onClick={() => {
+                  handleSearch();
+                }}
+              >
+                Search
+              </Button>
+            </div>
+            <h1>
+              <Button
+                onClick={() => {
+                  navigate("../add");
+                }}
+              >
+                Add new inquiry
+              </Button>
+            </h1>
+
+            {inquiryFormatter(inquiries)}
+          </div>
+        </div>
       </div>
     );
   }

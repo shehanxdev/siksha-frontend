@@ -13,6 +13,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 function Dashboard() {
   const [searchTerm, setSearchTerm] = useState();
@@ -44,6 +46,40 @@ function Dashboard() {
   const handleEdit = (inquiry) => {
     setSelectedInquiry({ ...inquiry });
     setDialogOpen(true);
+  };
+
+  const generatePdf = () => {
+    const doc = new jsPDF();
+    console.log(inquiries);
+    // const inquiriess = [...inquiries];
+
+    const header = [
+      [
+        "Name",
+        "Student ID",
+        "Inquiry Type",
+        "Subject",
+        "Email",
+        "Contact No",
+        "Message",
+      ],
+    ];
+    const data = inquiries.map((inquiry) => [
+      inquiry.name,
+      inquiry.studentId,
+      inquiry.inquiryType,
+      inquiry.subject,
+      inquiry.email,
+      inquiry.contactNo,
+      inquiry.message,
+    ]);
+
+    doc.autoTable({
+      head: header,
+      body: data,
+    });
+
+    doc.save("inquiries.pdf");
   };
 
   const handleSearch = () => {
@@ -331,6 +367,13 @@ function Dashboard() {
                 Add new inquiry
               </Button>
             </h1>
+            <button
+              onClick={() => {
+                generatePdf();
+              }}
+            >
+              Download PDF
+            </button>
 
             {inquiryFormatter(inquiries)}
           </div>
